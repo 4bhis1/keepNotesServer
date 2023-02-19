@@ -3,8 +3,6 @@ const moment = require("moment");
 
 const { Schema } = mongoose;
 
-const date = new Date();
-
 const NotesSchema = new Schema({
   createdBy: { type: Schema.Types.ObjectId, ref: "users" },
   groupName : String,
