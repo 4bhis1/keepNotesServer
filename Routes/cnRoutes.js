@@ -1,13 +1,15 @@
 const express = require("express");
+const { showActivity, addActivity, showDailyActivity } = require("../Controllers/createNotes/Activities");
 const { login } = require("../Controllers/createNotes/Credentials");
 const { saveNotes, updateNotes, getAllNotes, getPage } = require("../Controllers/createNotes/SaveNotes");
 
 const router = express.Router();
 
 router.route("/credentials/login").post(login)
-router.route("/notes").post(saveNotes).patch(updateNotes)
-router.route("/getAllNotes").post(getAllNotes)
-router.route("/getPage").post(getPage)
+
+
+router.route("/activities").get(showActivity).post(addActivity)
+router.route("/activities/:activityId/dailyActivity").get(showDailyActivity)
 
 // router.route("/re").post((req, res) => {
 //   console.log("ree");

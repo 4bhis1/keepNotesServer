@@ -1,4 +1,4 @@
-const UsersSchema = require("../../Schemas/createNotes/UsersSchema");
+const UsersSchema = require("../../apis/user/Schema");
 
 exports.login = async (req, res) => {
   try {

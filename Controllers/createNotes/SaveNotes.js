@@ -1,4 +1,4 @@
-const NotesSchema = require("../../Schemas/createNotes/NotesSchema");
+const NotesSchema = require("../../apis/notes/Schema");
 
 exports.saveNotes = async (req, res) => {
   try {
@@ -26,13 +26,14 @@ exports.saveNotes = async (req, res) => {
   }
 };
 
-exports.updateNotes = async (req, res) => {
+exports.updateNotes = async ({ body, params }, res) => {
   try {
-    console.log("in update NOtes");
+    console.log("in update NOtes", params);
+    const { pageId } = params;
 
-    const { pageId, note, heading, pinned, background, updatedon } = req.body;
+    const { note, heading, pinned, background } = body;
 
-    console.log("request Body", req.body);
+    // console.log("request Body", body);
 
     const tempData = await NotesSchema.updateOne(
       { _id: pageId },
@@ -42,12 +43,11 @@ exports.updateNotes = async (req, res) => {
           note,
           pinned,
           background,
-          updatedon,
         },
       }
     );
 
-    console.log("tempdata", tempData);
+    // console.log("tempdata", tempData);
 
     res.status(200).send({ message: "Successful", result: { tempData } });
   } catch (err) {
@@ -56,11 +56,11 @@ exports.updateNotes = async (req, res) => {
   }
 };
 
-exports.getAllNotes = async (req, res) => {
+exports.getUserNotes = async ({ body, params }, res) => {
   try {
     console.log("Indside getAll Notes");
 
-    const { userId } = req.body;
+    const { userId } = params;
 
     const tempData = await NotesSchema.find({ createdBy: userId });
 
@@ -73,19 +73,20 @@ exports.getAllNotes = async (req, res) => {
   }
 };
 
-exports.getPage = async (req, res) => {
+exports.getPage = async ({ body, params }, res) => {
   try {
-    console.log("Indside getAll Notes");
+    console.log("Indside get page notes");
 
-    const { pageId } = req.body;
+    const { pageId } = params;
 
     const tempData = await NotesSchema.find({ _id: pageId });
+    console.log("\n@@@  file: SaveNotes.js:83  tempData:", tempData)
 
     console.log("temp Data of getAllNotes");
 
     res
       .status(200)
-      .send({ message: "Successful", result: tempData[0]["note"] });
+      .send({ message: "Successful", result: tempData[0] });
   } catch (err) {
     console.log(">>> Error in getAllNotes", err);
     res.status(400).send({ message: "Error in GetAllNotes" });
